@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Article;
+use App\Entity\Category;
 use App\Form\ArticleType;
+use App\Form\CategoryType;
 
 class IndexController extends AbstractController
 {
@@ -102,5 +104,19 @@ class IndexController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('article_list');
+    }
+
+    #[Route('/category/newCat', name: 'new_category', methods: ['GET', 'POST'])]
+    public function newCategory(Request $request, EntityManagerInterface $entityManager) {
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class,$category);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+        }
+        return $this->render('articles/newCategory.html.twig',['form'=>
+        $form->createView()]);
     }
 }

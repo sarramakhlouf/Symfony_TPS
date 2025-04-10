@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Category; // 👈 à ajouter
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -23,12 +24,16 @@ class Article
     )]
     private ?string $nom = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 0)]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     #[Assert\NotEqualTo(
         value: 0,
         message: "Le prix ne peut pas être égal à 0."
     )]
     private ?float $prix = null;
+
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -54,6 +59,17 @@ class Article
     public function setPrix(float $prix): self
     {
         $this->prix = $prix;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
         return $this;
     }
 }
