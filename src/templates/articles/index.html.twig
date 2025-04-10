@@ -1,26 +1,35 @@
 {% extends 'base.html.twig' %}
 {% block title%} Liste des Articles{% endblock %}
+
 {% block body %}
-{% if articles %}
-<table id="articles" class="table table-striped">
-<thead>
-<tr>
-<th>Article</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody>
-{% for article in articles %}
-<tr>
-<td>{{ article }}</td>
-<td>
-<a href="/article/1" class="btn btn-dark">Détails</a>
-</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
-{% else %}
-<p>Aucun articles</p>
-{% endif %}
+    {% if articles %}
+        <table id="articles" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.nom }}</td>
+                        <td>{{ article.prix }}</td>
+                        <td>
+                            <a href="/article/{{ article.id }}" class="btn btn-dark">Détails</a>
+                            <a href="/article/edit/{{ article.id }}" class="btn btn-dark">Modifier</a>
+                            <form action="{{ path('delete_article', { 'id': article.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Etes-vous sûr de supprimer cet article ?');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>Aucun articles</p>
+    {% endif %}
 {% endblock %}
