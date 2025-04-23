@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Category; // 👈 à ajouter
+use App\Entity\Category; 
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article

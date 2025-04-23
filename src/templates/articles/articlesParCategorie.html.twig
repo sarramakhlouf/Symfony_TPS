@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Articles par Catégorie{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Recherche d'articles par catégorie</h1>
+
+{{ form_start(form) }}
+<div class="form-row align-items-end">
+    <div class="col">
+        {{ form_row(form.category) }}
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Rechercher</button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+
+<hr>
+
+{% if articles is not empty %}
+    <table id="articles" class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Catégorie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.nom }}</td>
+                    <td>{{ article.prix }}</td>
+                    <td>{{ article.category.titre }}</td>
+                    <td>
+                        <a href="/article/{{ article.id }}" class="btn btn-dark btn-sm">Détails</a>
+                        <a href="/article/edit/{{ article.id }}" class="btn btn-primary btn-sm">Modifier</a>
+                        <a href="/article/delete/{{ article.id }}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
+                           Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="mt-4">Aucun article trouvé pour cette catégorie.</p>
+{% endif %}
+{% endblock %}
